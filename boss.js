@@ -1,4 +1,5 @@
 /*去除应用无障碍检测后可用android环境异常的套壳无法启动(例如一般的Android虚拟机)*/
+/*当前使用环境Android13*/
 //启动应用
 launchApp('BOSS直聘');
 //设置分辨率
@@ -20,32 +21,32 @@ var timer2=random(3000,8000);//2-8秒的时间
 //进入界面后1-3秒开始执行防止卡顿
 sleep(timer2);
 
-id("tv_tab_label").className("android.widget.TextView").text("深圳").waitFor();
-var shenzhenx=id("tv_tab_label").className("android.widget.TextView").text("深圳").findOne().bounds().centerX();
-var shenzheny=id("tv_tab_label").className("android.widget.TextView").text("深圳").findOne().bounds().centerY();
+id("tv_tab_label").className("android.widget.TextView").text("xx").waitFor();
+var shenzhenx=id("tv_tab_label").className("android.widget.TextView").text("xx").findOne().bounds().centerX();
+var shenzheny=id("tv_tab_label").className("android.widget.TextView").text("xx").findOne().bounds().centerY();
 click(shenzhenx,shenzheny);
-changelocal('全深圳','宝安区');
+changelocal('全xx','xx区');
 sleep(3000);
-changelocal('全宝安区','福田区');
+changelocal('全xx','xx1区');
 sleep(3000);
-changelocal('全福田区','罗湖区');
+changelocal('全xx1区','xx2区');
 sleep(3000);
-changelocal('全罗湖区','南山区');
+changelocal('全xx2区','xx3区');
 sleep(3000);
-changelocal('全南山区','大学城');
+changelocal('全xx3区','xxx');
 sleep(3000);
-changelocal('1','后海');
+changelocal('1','xx');
 sleep(3000);
 id("count").text('2').waitFor();
 swipe(650,2015,650,371,1000);
 sleep(3000);
-changelocal('科技园','科技园');
+changelocal('xx园','xx园');
 sleep(3000);
-changelocal('3','南山中心');
+changelocal('3','xx中心');
 sleep(3000);
-changelocal('4','世界之窗');
+changelocal('4','xxx窗');
 sleep(3000);
-changelocal('5','桃园');
+changelocal('5','x园');
 sleep(3000);
 id("count").text('6').waitFor();
 sleep(1000);
