@@ -34,26 +34,15 @@ log(`启动时间 ${starttime}`);
                                         if(more.findOne(10000)!=null){
                                         break;
                                                 }}
-                                        //登录校验及初始化
-                                        var login=text('%users%').findOne(60000);
-                                        if(login!=null){
-                                        log('已登录');
-                                                        }
-                                        else{
-                                        launchApp('微信');
-                                        fengzhuang('通讯录');
-                                        fengzhuang('Retist');
-                                        fengzhuang('发消息');
-                                        id('kii').waitFor();
-                                        setText("登录过期");
-                                        text('发送').findOne().click();
-                                        //发送消息延迟
-                                        sleep(5000);
+                                        //登录校验及初始化,
+                                        //未登录则重启应用
+                                        while(text('%users%').findOne(10000)==null){
+                                        log('未检测到登录账号');
                                         jieshuapp();
-                                        jieshuapp();
-                                        log('脚本未能成功执行');
-                                        exit();
-                                                                        }
+                                        launchApp('%jdassistant%');
+                                        if(text('%users%').findOne(10000)!=null){
+                                        break;
+                                                }}
                                 //辅助工具初始化-清空收藏&&关注
                                 for(let i=0;i<2;i++){
                                 more.findOne().click();
