@@ -1,13 +1,13 @@
-## <p aligin='center'>脚本列表</p>
+## `<p aligin='center'>` Scripts`</p>`
 
 ##### <p aligin='center'> | <a href='#'>中文</a> | <a href='#'>English</a> | </p>
 
-### 分类
-* 求职
+### Categories
+* Job Hunting
     * <a href='#'>BossHire</a>
 
-* 教育
+* Education
     * <a href='#'>QGXueXi</a>
 
-* 购物
+* Shopping
     * <a href='#'>JDAssistant</a>
