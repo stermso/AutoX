@@ -2,7 +2,7 @@
 
 ##### <p align='center'> | <a href='#'>中文</a> | <a href='#'>English</a> | </p>
 
-### 分类
+### 类别
 
 * 求职
 
