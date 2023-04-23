@@ -1,6 +1,6 @@
 ## <p align='center'>脚本列表</p>
 
-<p align='center'> | <a font-weight='bolder' href='https://github.com/stermso/AutoX'>中文</a> | <a href='https://github.com/stermso/AutoX/blob/main/Docs/README-EN.md'>English</a> | </p>
+<p align='center'> | <p font-weight='bolder'><a href='https://github.com/stermso/AutoX'>中文</a></p> | <a href='https://github.com/stermso/AutoX/blob/main/Docs/README-EN.md'>English</a> | </p>
 
 ### 类别
 
