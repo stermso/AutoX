@@ -1,11 +1,10 @@
-//获取启动时间
+//初始启动时间
 var starttime=new Date();
 log(`启动时间 ${starttime}`);
-
-
         //变量声明
         //包名
-        var xf='%jdassistant%';
+        var point=1;//判断重启应用次数
+        var xf='%assistant%';
         var wechat='com.tencent.mm';
         var jingdong='com.jingdong.app.mall';
         //右上角更多控件
@@ -17,49 +16,72 @@ log(`启动时间 ${starttime}`);
 
 
                         //请求截屏权限
+                        //截屏权限回收太麻烦了,可以在应用的初始示例中查看
+                        //懒得改了,一直开着截屏权限好了
                         requestScreenCapture();
 
 
                                 //设置每天执行次数
-                                for(var xunhuan=1;xunhuan<8;xunhuan++){
-                                log(`第${xunhuan}次执行`);
+                                for(var CycleTime=1;CycleTime<8;CycleTime++){
+                                //设置每次启动时间
+                                let PerTimeStart=new Date();
+                                log(`第${CycleTime}次启动时间为${PerTimeStart}`);
                                 //启动应用
-                                launchApp('%jdassistant%');
+                                launchApp('%assistant%');
                                         //判断是否进入应用界面
                                         while(more.findOne(10000)==null){
-                                        log('未进入界面')
+                                        log('未进入界面');
                                         //重新启动应用
-                                        launchApp('%jdassistant%');
+                                        launchApp('%assistant%');
                                         //判断退出循环执行条件为查找控件10秒，若满足条件则跳出否则继续循环
                                         if(more.findOne(10000)!=null){
                                         break;
-                                                }}
-                                        //登录校验及初始化,
-                                        //未登录则重启应用
-                                        while(text('%users%').findOne(10000)==null){
-                                        log('未检测到登录账号');
-                                        jieshuapp();
-                                        launchApp('%jdassistant%');
-                                        if(text('%users%').findOne(10000)!=null){
+                                                }
+                                                        }
+                                        //登录校验及初始化
+                                        //进入界面但未检测到账号登录
+                                        while(text('%User%').findOne(10000)==null){
+                                        point++;
+                                        log('未检测到账号登录');
+                                        ExitApp();
+                                        launchApp('%assistant%');
+                                        if(text('%User%').findOne(10000)!=null){
                                         break;
-                                                }}
+                                                }
+                                        if(point==10){
+                                        ExitApp();
+                                        launchApp('微信');
+                                        ClickFunc('通讯录');
+                                        ClickFunc('%wechatUser%');
+                                        ClickFunc('发消息');
+                                        id('kii').waitFor();
+                                        setText("登录过期");
+                                        sleep(3000);
+                                        text('发送').findOne().click();
+                                        //发送消息延迟
+                                        sleep(5000);
+                                        ExitApp();
+                                        log('xf登录过期');
+                                        exit();
+                                                }
+                                                        }
                                 //辅助工具初始化-清空收藏&&关注
                                 for(let i=0;i<2;i++){
                                 more.findOne().click();
                                 log('点击更多');
-                                fengzhuang('工具盒');
+                                ClickFunc('工具盒');
                                 if(i==0){
-                                fengzhuang('清空收藏商品');
-                                fengzhuang('确认');
+                                ClickFunc('清空收藏商品');
+                                ClickFunc('确认');
                                                                 }
                                 else{
-                                fengzhuang('清空店铺关注');
-                                fengzhuang('确认');
+                                ClickFunc('清空店铺关注');
+                                ClickFunc('确认');
                                                                 }
                                 text('点击"结束脚本"按钮返回').waitFor();
-                                let jieshux=text('结束脚本').findOne().bounds().centerX();
-                                let jieshuy=text('结束脚本').findOne().bounds().centerY();
-                                click(jieshux,jieshuy);
+                                let EndX=text('结束脚本').findOne().bounds().centerX();
+                                let EndY=text('结束脚本').findOne().bounds().centerY();
+                                click(EndX,EndY);
                                 log('结束脚本');
                                                                                         }
                         //7个脚本任务
@@ -72,45 +94,55 @@ log(`启动时间 ${starttime}`);
                         task2('种豆得豆','收取营养液');
                         task2('领京豆','领取购物返豆');
                         task2('宠汪汪','自动喂养');
-                        jieshuapp();
-                //判断辅助脚本执行次数是否足够结束
-                //第七次循环执行完毕则结束脚本
-                if(xunhuan==7){
+                        ExitApp();
+                //判断结束脚本的条件
+                //执行七次结束脚本
+                if(CycleTime==7){
                 //调用滑动验证函数
                 SwipeChoose(2,261,1097,932,1402,148,1488);
-                //获取结束时间,并计算总耗时
+                //调用本次执行结束耗时及本次结束时间
+                PerTimeEnd(CycleTime,PerTimeStart);
+                //获取最终结束时间,并计算总耗时
                 var endtime=new Date();
-                log(`结束时间为：${endtime}`);
-                var difftime=(endtime-starttime)/1000;
-                var days = parseInt(difftime/86400);
-                var hours = parseInt(difftime/3600)-24*days;
-                var minutes = parseInt(difftime%3600/60);
-                var seconds = parseInt(difftime%60);
-                //一天执行7次,每天从1点开始,每次执行完过3小时20秒再执行下一次，
-                //预计7次全用时小于22h10m
+                log(`最终结束时间为：${endtime}`);
+                var difftime=(endtime-starttime)/1000;//秒差
+                var days=parseInt(difftime/86400);
+                var hours=parseInt((difftime%86400)/3600);
+                var minutes=parseInt((difftime%86400%3600)/60);
+                var seconds=difftime%86400%3600%60;
+                //一天执行7次,每天从1点开始,每次执行完过3小时20秒再执行下一次
                 log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
                 //当天全部执行完毕后退出脚本
-                exit();
+                // exit();
                                                                                 }
-        else if(xunhuan==1||xunhuan==6){
+        else if(CycleTime==1||CycleTime==6){
         //调用滑动验证函数
         SwipeChoose(1,261,1097,932,1402,148,1488);
                                                         }
 else{
 SwipeChoose(2,261,1097,932,1402,148,1488);
                                                 }
+//每次执行完显示执行时长及下次执行时间
+PerTimeEnd(CycleTime,PerTimeStart);
 
-let nowtime=new Date();
-let NextTime=nowtime.getTime()+11000000;
-log(`已执行${xunhuan}次,下一次执行时间为：${new Date(NextTime)}`);
 //设置执行完毕后多久执行下一次
 sleep(11000000);
                                                         }
 
 
 //TAG需要调用的函数
+//每次结束时显示执行时长,执行次数及下次执行时间
+function PerTimeEnd(CycleTime,PerTimeStart){
+let NowTime=new Date();
+let NextTime=NowTime.getTime()+11000000;
+let Duration=(NowTime-PerTimeStart)/1000;
+let DurationMinute=parseInt(Duration/60);
+let DurationSecond=(Duration%60).toFixed(2);
+log(`已执行完第${CycleTime}次,本次耗时：${DurationMinute}分${DurationSecond}秒,下一次执行时间为：${new Date(NextTime)}`);
+}
+
 //封装的点击函数
-function fengzhuang(name){
+function ClickFunc(name){
 text(name).waitFor();
 let x=text(name).findOne().bounds().centerX();
 let y=text(name).findOne().bounds().centerY();
@@ -123,15 +155,14 @@ log(`点击${name}`);
 
 
 //结束应用的函数
-//适用于横向任务列表
-function jieshuapp(){
+function ExitApp(){
 sleep(1000);
 home();
 sleep(1000);
 recents();
 sleep(1000);
-Swipe(531,1612,542,93,500);
-sleep(1000);
+Swipe(540,1660,540,150,1000);
+sleep(3000);
 home();
         }
 
@@ -140,43 +171,43 @@ home();
 function taskconfirm(x){
 //判断启动
 text('启动脚本').waitFor();
-let qidongx=text('启动脚本').findOne().bounds().centerX();
-let qidongy=text('启动脚本').findOne().bounds().centerY();
-click(qidongx,qidongy);
+let StartX=text('启动脚本').findOne().bounds().centerX();
+let StartY=text('启动脚本').findOne().bounds().centerY();
+click(StartX,StartY);
 //判断结束
 if(x=='宠汪汪'){
 SwipeChoose(0,327,1150,838,1381,242,1466);
                                                 }
 else{
 text('点击"结束脚本"按钮返回').waitFor();
-let jieshux=text('结束脚本').findOne().bounds().centerX();
-let jieshuy=text('结束脚本').findOne().bounds().centerY();
-click(jieshux,jieshuy);
+let EndX=text('结束脚本').findOne().bounds().centerX();
+let EndY=text('结束脚本').findOne().bounds().centerY();
+click(EndX,EndY);
                         }
                                 }
 
 
 //找到数组中重复次数最多值的函数
 function getMaxNum(arr){
-let obj={};
-for (let i=0;i<arr.length;i++){
-if(obj[arr[i]]){
-obj[arr[i]]++;
-                }
-else{
-obj[arr[i]]=1;
-                }
+        let obj={};
+        for (let i=0;i<arr.length;i++){
+        if(obj[arr[i]]){
+        obj[arr[i]]++;
                         }
-let maxNum=0;
-let maxKey='';
-for(let key in obj){
-if(obj[key]>maxNum){
-maxNum=obj[key];
-maxKey=key;
-                }
+        else{
+        obj[arr[i]]=1;
                         }
-return Number(maxKey);
+                                }
+        let maxNum=0;
+        let maxKey='';
+        for(let key in obj){
+        if(obj[key]>maxNum){
+        maxNum=obj[key];
+        maxKey=key;
                         }
+                                }
+        return Number(maxKey);
+                                }
 
 
 //脚本任务函数
@@ -204,7 +235,7 @@ log(`${name1}完成`);
                         }
 
 
-//STAR 四阶贝斯曲线随机滑动函数
+//随机滑动函数
 function randomSwipe(sx,sy,ex,ey){
 //设置随机滑动时长范围
 var timeMin=500;
@@ -230,12 +261,9 @@ if(ly<0){ly=-ly};
 var y2=sy+ly/2+random(0,ly);
 var y3=sy+ly+ly/2+random(0,ly);
                                 }
-//获取运行轨迹，及参数
+//获取运行轨迹
 var time=[0,random(timeMin,timeMax)];
 var track=bezierCreate(sx,sy,x2,y2,x3,y3,ex,ey);
-// log("随机控制点A坐标："+x2+","+y2);
-// log("随机控制点B坐标："+x3+","+y3);
-// log("随机滑动时长："+time[1]);
 //滑动
 gestures(time.concat(track));
                                 }
@@ -268,7 +296,7 @@ x: result_x,
 y: result_y
                 }
                         }
-//轨迹转路数组
+//轨迹转数组对
 var array=[];
 for(var i=0;i<curve.length;i++){
 try{
@@ -290,12 +318,12 @@ function SwipeChoose(g,a,b,c,d,e,f){
 if(g==1){
 foodChoise(20);
 VerifySwipe(a,b,c,d,e,f);
-jieshuapp();
+ExitApp();
                                 }
 else if(g==2){
 foodChoise(10);
 VerifySwipe(a,b,c,d,e,f);
-jieshuapp();
+ExitApp();
                                 }
 else if(g==0){
 VerifySwipe(a,b,c,d,e,f);
@@ -319,11 +347,9 @@ log('点击我的');
 //点击宠汪汪
 text('宠汪汪').waitFor();
 sleep(1000);
-//STAR 指定坐标范围查找控件
-//点击宠汪汪
-// className('android.widget.FrameLayout').depth("12").drawingOrder("2").indexInParent("1").boundsInside(252,1334,443,1494).findOne().click();
-var cwwb=text('宠汪汪').findOne().parent().bounds();
-click(cwwb.centerX(),cwwb.centerY());
+var cww=text('宠汪汪').findOne().parent().bounds();
+click(cww.centerX(),cww.centerY());
+log('点击宠汪汪');
 sleep(1000);
 text('积分超值兑换').waitFor();
 sleep(1000);
@@ -383,7 +409,7 @@ s+=ss;
         }
 files.append(path,s+'\n');
                                 }
-//目标滑块01代码匹配(jdassistant)
+//目标滑块01代码匹配(%assistant%)
 //滑块01代码:
 //1000000000000000000000000000000000000000000000000000000000000000001 TYPE1
 //100000000000000000000000000000000000000000000000000000000000000001  TYPE2
@@ -468,7 +494,7 @@ log('hx:'+hx);
 // let hy=Math.floor(random()*(1375-1155+1))+1155;改写成如下格式:
 let hy=random(b+2,d-2);
 log('hy:'+hy);
-//调用四阶贝斯曲线仿真滑动，传入上诉随机值，并开始随机滑动
+//调用随机滑动函数仿真滑动，传入上诉随机值，并开始随机滑动
 randomSwipe(gx,gy,hx,hy);
 log('开始随机滑动');
                         }
