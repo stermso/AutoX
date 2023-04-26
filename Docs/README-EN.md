@@ -1,6 +1,6 @@
 <div align="center">
 <h1 align='center'>Scripts</h1>
-<img src='https://visitor-badge.glitch.me/badge?page_id=stermso/AutoX' alt="visitors"/>
+<img src='https://visitor-badge.glitch.me/badge?page_id=stermso/AutoX' alt=":访客统计:"/>
 <p> | <a href='https://github.com/stermso/AutoX'>中文</a> | <a href='https://github.com/stermso/AutoX/blob/main/Docs/README-EN.md'>English</a> | </p>
 </div>
 
