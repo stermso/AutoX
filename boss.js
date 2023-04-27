@@ -51,11 +51,20 @@ sleep(3000);
 id("count").text('6').waitFor();
 sleep(1000);
 id("btn_confirm").findOne().click();
+//等待确定后返回发布界面
+id("iv_improper").waitFor();
+//点击选择最新发布的信息
+click(347,271);
 //外层循环
 for(let wci=1;wci<51;wci++){
-
-//内层循环执行一个页面的四次点击
-for(let ncj=0;ncj<4;ncj++){
+//内层循环执行一个页面的投递次数
+//判断是否存在视频面试栏,存在则切换为1-3
+if(id("iv_improper").boundsInside(22,364,1058,774).findOne(3000)){
+ncjTrue=0;
+                }else{
+ncjTrue=1;
+                }
+for(let ncj=ncjTrue;ncj<4;ncj++){
 //招聘信息点击横坐标初始化
 var djy=null;
 //三元运算匹配第几次执行时使用哪个纵坐标
