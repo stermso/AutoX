@@ -113,7 +113,8 @@ log(`启动时间 ${starttime}`);
                 //一天执行7次,每天从1点开始,每次执行完过3小时20秒再执行下一次
                 log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
                 //当天全部执行完毕后退出脚本
-                // exit();
+                //执行完毕后直接退出，避免执行后续的11000000s等待
+                exit();
                                                                                 }
         else if(CycleTime==1||CycleTime==6){
         //调用滑动验证函数
@@ -138,7 +139,11 @@ let NextTime=NowTime.getTime()+11000000;
 let Duration=(NowTime-PerTimeStart)/1000;
 let DurationMinute=parseInt(Duration/60);
 let DurationSecond=(Duration%60).toFixed(2);
+if(CycleTime=7){
+log(`已执行完第${CycleTime}次,本次耗时：${DurationMinute}分${DurationSecond}秒`);
+}else{
 log(`已执行完第${CycleTime}次,本次耗时：${DurationMinute}分${DurationSecond}秒,下一次执行时间为：${new Date(NextTime)}`);
+        }
 }
 
 //封装的点击函数
