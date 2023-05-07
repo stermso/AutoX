@@ -59,10 +59,10 @@ click(347,271);
 for(let wci=1;wci<51;wci++){
 //内层循环执行一个页面的投递次数
 //判断是否存在视频面试栏,存在则切换为1-3
-if(id("iv_improper").boundsInside(22,364,1058,774).findOne(3000)){
-ncjTrue=0;
-                }else{
+if(id("iv_improper").boundsInside(22,364,1058,774).findOne(3000)||text('面试签到').findOne(3000)){
 ncjTrue=1;
+                }else{
+ncjTrue=0;
                 }
 for(let ncj=ncjTrue;ncj<4;ncj++){
 //招聘信息点击横坐标初始化
