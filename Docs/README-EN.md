@@ -6,12 +6,19 @@
 
 * Job Hunting
 
-  * <a href='https://github.com/stermso/AutoX/blob/BossHire/boss.js
-'>BossHire</a>
+  * <a href='https://github.com/stermso/AutoX/blob/BossHire/boss.js'>BossHire</a>
+
 * Education
 
   * <a href='https://github.com/stermso/AutoX/blob/QGXueXi/xuexiQG.js'>QGXueXi</a>
+
 * Shopping
 
-  * <a href='https://github.com/stermso/AutoX/blob/JDAssistant/JDAssistant.js
-'>JDAssistant</a>
+  * <a href='https://github.com/stermso/AutoX/blob/JDAssistant/JDAssistant.js'>JDAssistant</a>
+
+* Convertible Welfare
+
+  * <a href='https://github.com/stermso/AutoX/blob/ConvertibleWelfare/JDBeanOfDog.js'>ConvertibleWelfare</a>
+
+
+

@@ -7,9 +7,15 @@
 * 求职
 
   * <a href='https://github.com/stermso/AutoX/blob/BossHire/boss.js'>BossHire</a>
+
 * 教育
 
   * <a href='https://github.com/stermso/AutoX/blob/QGXueXi/xuexiQG.js'>QGXueXi</a>
+
 * 购物
 
   * <a href='https://github.com/stermso/AutoX/blob/JDAssistant/JDAssistant.js'>JDAssistant</a>
+
+* 福利兑换
+
+  * <a href='https://github.com/stermso/AutoX/blob/ConvertibleWelfare/JDBeanOfDog.js'>ConvertibleWelfare</a>
