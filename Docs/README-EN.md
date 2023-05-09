@@ -1,6 +1,7 @@
-## <p align='center'>Scripts</p>
-
- <p align='center'> | <a href='https://github.com/stermso/AutoX'>中文</a> | <a href='https://github.com/stermso/AutoX/blob/main/Docs/README-EN.md'>English</a> | </p>
+<div align="center">
+<h1 align='center'>Scripts</h1>
+<p> | <a href='https://github.com/stermso/AutoX'>中文</a> | <a href='https://github.com/stermso/AutoX/blob/main/Docs/README-EN.md'>English</a> | </p>
+</div>
 
 ### Categories
 
