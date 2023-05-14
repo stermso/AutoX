@@ -75,23 +75,32 @@ log('存在并可正常读取积分');
 function EnoughIntegral(){
 sleep(5000);
 //匹配大于8000的值
-let IntegralReg=/^([8-9]\d{3,}|\d{5,})?$/;
+// let IntegralReg=/^([8-9]\d{3,}|\d{5,})$/;
 //查找符合条件的text控件UiSelector.textMatches(reg)
-let integral=className("android.view.View").depth("16").drawingOrder("0").indexInParent("3").boundsInside(464,275,577,322).textMatches(IntegralReg).findOne(10000);
-if(integral){
-log('积分足够兑换500京豆');
+let integral=className("android.view.View").depth("16").drawingOrder("0").indexInParent("3").boundsInside(464,275,577,322).textMatches(/\d+/).findOne(10000);
+if(integral.text()>8000){
+log(`当前积分为${integral.text()},可兑换500京豆`);
                                 }
 else{
 //结束程序
 EndApp();
-log('积分不足以兑换500京豆,结束脚本');
+log(`当前积分为${integral.text()},不足以兑换500京豆,结束脚本`);
 engines.myEngine().forceStop();
                                 }
                                         }
 
 //立即兑换存在并点击
 function ClickConvertible(){
-while(text('立即兑换').findOnce(1)==null){}
+let n=0;
+sleep(5000);
+log(text('立即兑换').findOnce(1).depth());
+log(text('立即兑换').findOnce(1).drawingOrder());
+log(text('立即兑换').findOnce(1).indexInParent());
+while(text('立即兑换').findOnce(1)==null){
+n++;
+log(n);
+}
+log(`等待${n/100}秒后找到控件`);
 text('立即兑换').findOnce(1).click();
 if(text('确定').findOne(10000)!=null){
 //点击确定
