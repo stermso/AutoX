@@ -90,6 +90,7 @@ engines.myEngine().forceStop();
                                         }
 
 //立即兑换存在并点击
+//FIXME
 function ClickConvertible(){
 let n=0;
 sleep(5000);
@@ -111,6 +112,7 @@ log('已确定');
 log('已抢光/超时');
                         }
                                 }
+//FIXME
 
 //启动函数
 function EnterCww(){
