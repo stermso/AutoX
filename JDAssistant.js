@@ -124,7 +124,9 @@ else{
 SwipeChoose(2,261,1097,932,1402,148,1488);
                                                 }
 //每次执行完显示执行时长及下次执行时间
+if(CycleTime!=7){
 PerTimeEnd(CycleTime,PerTimeStart);
+                                        }
 
 //设置执行完毕后多久执行下一次
 sleep(11000000);
