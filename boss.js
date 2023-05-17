@@ -6,18 +6,16 @@ launchApp('BOSS直聘');
 setScreenMetrics(1080,2400);
 //保持设备常亮
 device.keepScreenOn();
-//TAG 设置各个坐标随机数防止被智能识别自动退出登陆
+
+//设置各个坐标随机数防止被智能识别自动退出登陆
 var djx=random(30,960);//点击招聘的横坐标
-var djy1=random(370,800);//一页四个招聘信息的第一个
-var djy2=random(840,1280);//第二个纵坐标
-var djy3=random(1320,1750);//第三个纵坐标
-var djy4=random(1790,2220);//第四个纵坐标
 var swipex1=random(30,1050);//下拉横坐标1
 var swipex2=random(30,1050);//下拉横坐标2
 var swipey1=random(370,590);//下拉纵坐标1
 var swipey2=random(1500,2220);//下拉纵坐标2
 var timer1=random(1000,3000);//1-3秒的时间
 var timer2=random(3000,8000);//2-8秒的时间
+
 //进入界面后1-3秒开始执行防止卡顿
 sleep(timer2);
 
@@ -55,8 +53,37 @@ id("btn_confirm").findOne().click();
 id("iv_improper").waitFor();
 //点击选择最新发布的信息
 click(347,271);
+sleep(7000);
+
+//INSPIR 信息列表栏的高度存在变化性因此修改为动态获取高度并设置随机值
+// var djy1=random(370,800);//纵坐标1
+// var djy2=random(840,1280);//第二个纵坐标
+// var djy3=random(1320,1750);//第三个纵坐标
+// var djy4=random(1790,2220);//第四个纵坐标
 //外层循环
 for(let wci=1;wci<51;wci++){
+//获取随机坐标
+//INSPIR
+let RandomTop=GetRandomNum()[0];
+log(RandomTop);
+let RandomBottom=GetRandomNum()[1];
+log(RandomBottom);
+let djy1=random(RandomTop[0],RandomBottom[0]);
+let djy2=random(RandomTop[1],RandomBottom[1]);
+let djy3=random(RandomTop[2],RandomBottom[2]);
+let djy4=random(RandomTop[3],RandomBottom[3]);
+
+//判断是否存在视频面试栏,存在则切换为1-3
+//每四次执行完就判断并赋初值
+let ncjTrue=null;
+if(text('面试签到').findOne(3000)){
+        log(id("iv_improper").boundsInside(22,364,1058,774).findOne());
+        log(text('面试签到').findOne());
+ncjTrue=1;
+                }else{
+ncjTrue=0;
+                }
+log(`ncjTrue:${ncjTrue}`);
 //内层循环执行一个页面的投递次数
 //判断是否存在视频面试栏,存在则切换为1-3
 if(id("iv_improper").boundsInside(22,364,1058,774).findOne(3000)||text('面试签到').findOne(3000)){
@@ -66,7 +93,8 @@ ncjTrue=0;
                 }
 for(let ncj=ncjTrue;ncj<4;ncj++){
 //招聘信息点击横坐标初始化
-var djy=null;
+let djy=null;
+log(ncj,djy1,djy2,djy3,djy4);
 //三元运算匹配第几次执行时使用哪个纵坐标
 djy=(ncj==0)?djy1:(ncj==1)?djy2:(ncj==2)?djy3:djy4;
 //确认区域后会有一次刷新，防止在刷新之前进行判断，停顿3秒
