@@ -1,15 +1,12 @@
 //设置屏幕尺寸，便于指定坐标时适配全分辨率操作
 setScreenMetrics(1080,2400);
 
-
         //完成兑换前判断
         EnterCww();
-
 
 //结束程序
 EndApp();
 engines.myEngine().forceStop();
-
 
 //结束应用的函数
 function EndApp(){
@@ -57,6 +54,7 @@ sleep(3000);
 ClickCww();
                 }
 log('存在并可进行兑换');
+
 //点击即将开始的场次
 click(540,1620);
                         }
@@ -74,6 +72,7 @@ log('存在并可正常读取积分');
 //判断是否足够兑换500京豆
 function EnoughIntegral(){
 sleep(5000);
+
 //匹配大于8000的值
 // let IntegralReg=/^([8-9]\d{3,}|\d{5,})$/;
 //查找符合条件的text控件UiSelector.textMatches(reg)
@@ -82,6 +81,7 @@ if(integral.text()>8000){
 log(`当前积分为${integral.text()},可兑换500京豆`);
                                 }
 else{
+
 //结束程序
 EndApp();
 log(`当前积分为${integral.text()},不足以兑换500京豆,结束脚本`);
@@ -104,6 +104,7 @@ log(n);
 log(`等待${n/100}秒后找到控件`);
 text('立即兑换').findOnce(1).click();
 if(text('确定').findOne(10000)!=null){
+
 //点击确定
 text('确定').findOne().click();
 sleep(2000);
