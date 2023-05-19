@@ -2,141 +2,141 @@
 var starttime=new Date();
 log(`启动时间 ${starttime}`);
 
-        //变量声明
-        var point=1;//判断重启应用次数
+//变量声明
+var point=1;//判断重启应用次数
 
-        //包名
-        var xf='%assistant%';
-        var wechat='com.tencent.mm';
-        var jingdong='com.jingdong.app.mall';
+//包名
+var xf='%assistant%';
+var wechat='com.tencent.mm';
+var jingdong='com.jingdong.app.mall';
 
-        //右上角更多控件
-        var more=className('android.widget.FrameLayout').depth(15).drawingOrder(2).indexInParent(1);
+//右上角更多控件
+var more=className('android.widget.FrameLayout').depth(15).drawingOrder(2).indexInParent(1);
 
-                //设置屏幕尺寸，便于指定坐标时适配全分辨率操作
-                setScreenMetrics(1080,2400);
+//设置屏幕尺寸，便于指定坐标时适配全分辨率操作
+setScreenMetrics(1080,2400);
 
-                        //请求截屏权限
-                        //截屏权限回收太麻烦了,可以在应用的初始示例中查看
-                        //懒得改了,一直开着截屏权限好了
-                        requestScreenCapture();
+//请求截屏权限
+//截屏权限回收太麻烦了,可以在应用的初始示例中查看
+//懒得改了,一直开着截屏权限好了
+requestScreenCapture();
 
-                                //设置每天执行次数
-                                for(var CycleTime=1;CycleTime<8;CycleTime++){
+//设置每天执行次数
+for(var CycleTime=1;CycleTime<8;CycleTime++){
 
-                                //设置每次启动时间
-                                let PerTimeStart=new Date();
-                                log(`第${CycleTime}次启动时间为${PerTimeStart}`);
+//设置每次启动时间
+let PerTimeStart=new Date();
+log(`第${CycleTime}次启动时间为${PerTimeStart}`);
 
-                                //启动应用
-                                launchApp('%assistant%');
+//启动应用
+launchApp('%assistant%');
 
-                                        //判断是否进入应用界面
-                                        while(more.findOne(10000)==null){
-                                        log('未进入界面');
+//判断是否进入应用界面
+while(more.findOne(10000)==null){
+log('未进入界面');
 
-                                        //重新启动应用
-                                        launchApp('%assistant%');
+//重新启动应用
+launchApp('%assistant%');
 
-                                        //判断退出循环执行条件为查找控件10秒，若满足条件则跳出否则继续循环
-                                        if(more.findOne(10000)!=null){
-                                        break;
-                                                }
+//判断退出循环执行条件为查找控件10秒，若满足条件则跳出否则继续循环
+if(more.findOne(10000)!=null){
+break;
+        }
+                }
+
+//登录校验及初始化
+//进入界面但未检测到账号登录
+while(text('%User%').findOne(10000)==null){
+point++;
+log('未检测到账号登录');
+ExitApp();
+launchApp('%assistant%');
+if(text('%User%').findOne(10000)!=null){
+break;
+        }
+if(point==10){
+ExitApp();
+launchApp('微信');
+ClickFunc('通讯录');
+ClickFunc('%wechatUser%');
+ClickFunc('发消息');
+id('kii').waitFor();
+setText("登录过期");
+sleep(3000);
+text('发送').findOne().click();
+
+//发送消息延迟
+sleep(5000);
+ExitApp();
+log('xf登录过期');
+exit();
+        }
+                }
+
+//辅助工具初始化-清空收藏&&关注
+for(let i=0;i<2;i++){
+more.findOne().click();
+log('点击更多');
+ClickFunc('工具盒');
+if(i==0){
+ClickFunc('清空收藏商品');
+ClickFunc('确认');
+                                }
+else{
+ClickFunc('清空店铺关注');
+ClickFunc('确认');
+                                }
+text('点击"结束脚本"按钮返回').waitFor();
+let EndX=text('结束脚本').findOne().bounds().centerX();
+let EndY=text('结束脚本').findOne().bounds().centerY();
+click(EndX,EndY);
+log('结束脚本');
                                                         }
 
-                                        //登录校验及初始化
-                                        //进入界面但未检测到账号登录
-                                        while(text('%User%').findOne(10000)==null){
-                                        point++;
-                                        log('未检测到账号登录');
-                                        ExitApp();
-                                        launchApp('%assistant%');
-                                        if(text('%User%').findOne(10000)!=null){
-                                        break;
+//7个脚本任务
+//类型1
+// task1('金榜创造营','执行福利任务');(已失效)
+task1('东东农场','执行签到页任务');
+task1('健康社区','收取健康能量');
+task1('订单公益','每日签到');
+
+//类型2
+task2('种豆得豆','收取营养液');
+task2('领京豆','领取购物返豆');
+task2('宠汪汪','自动喂养');
+ExitApp();
+
+//判断结束脚本的条件
+//执行七次结束脚本
+if(CycleTime==7){
+
+//调用滑动验证函数
+SwipeChoose(2,261,1097,932,1402,148,1488);
+
+//调用本次执行结束耗时及本次结束时间
+PerTimeEnd(CycleTime,PerTimeStart);
+
+//获取最终结束时间,并计算总耗时
+var endtime=new Date();
+log(`最终结束时间为：${endtime}`);
+var difftime=(endtime-starttime)/1000;//秒差
+var days=parseInt(difftime/86400);
+var hours=parseInt((difftime%86400)/3600);
+var minutes=parseInt((difftime%86400%3600)/60);
+var seconds=difftime%86400%3600%60;
+
+//一天执行7次,每天从1点开始,每次执行完过3小时20秒再执行下一次
+log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
+
+//当天全部执行完毕后退出脚本
+//执行完毕后直接退出，避免执行后续的11000000s等待
+exit();
+        }
+else if(CycleTime==1||CycleTime==6){
+
+//调用滑动验证函数
+SwipeChoose(1,261,1097,932,1402,148,1488);
                                                 }
-                                        if(point==10){
-                                        ExitApp();
-                                        launchApp('微信');
-                                        ClickFunc('通讯录');
-                                        ClickFunc('%wechatUser%');
-                                        ClickFunc('发消息');
-                                        id('kii').waitFor();
-                                        setText("登录过期");
-                                        sleep(3000);
-                                        text('发送').findOne().click();
-
-                                        //发送消息延迟
-                                        sleep(5000);
-                                        ExitApp();
-                                        log('xf登录过期');
-                                        exit();
-                                                }
-                                                        }
-
-                                //辅助工具初始化-清空收藏&&关注
-                                for(let i=0;i<2;i++){
-                                more.findOne().click();
-                                log('点击更多');
-                                ClickFunc('工具盒');
-                                if(i==0){
-                                ClickFunc('清空收藏商品');
-                                ClickFunc('确认');
-                                                                }
-                                else{
-                                ClickFunc('清空店铺关注');
-                                ClickFunc('确认');
-                                                                }
-                                text('点击"结束脚本"按钮返回').waitFor();
-                                let EndX=text('结束脚本').findOne().bounds().centerX();
-                                let EndY=text('结束脚本').findOne().bounds().centerY();
-                                click(EndX,EndY);
-                                log('结束脚本');
-                                                                                        }
-
-                        //7个脚本任务
-                        //类型1
-                        // task1('金榜创造营','执行福利任务');(已失效)
-                        task1('东东农场','执行签到页任务');
-                        task1('健康社区','收取健康能量');
-                        task1('订单公益','每日签到');
-
-                        //类型2
-                        task2('种豆得豆','收取营养液');
-                        task2('领京豆','领取购物返豆');
-                        task2('宠汪汪','自动喂养');
-                        ExitApp();
-
-                //判断结束脚本的条件
-                //执行七次结束脚本
-                if(CycleTime==7){
-
-                //调用滑动验证函数
-                SwipeChoose(2,261,1097,932,1402,148,1488);
-
-                //调用本次执行结束耗时及本次结束时间
-                PerTimeEnd(CycleTime,PerTimeStart);
-
-                //获取最终结束时间,并计算总耗时
-                var endtime=new Date();
-                log(`最终结束时间为：${endtime}`);
-                var difftime=(endtime-starttime)/1000;//秒差
-                var days=parseInt(difftime/86400);
-                var hours=parseInt((difftime%86400)/3600);
-                var minutes=parseInt((difftime%86400%3600)/60);
-                var seconds=difftime%86400%3600%60;
-
-                //一天执行7次,每天从1点开始,每次执行完过3小时20秒再执行下一次
-                log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
-
-                //当天全部执行完毕后退出脚本
-                //执行完毕后直接退出，避免执行后续的11000000s等待
-                exit();
-                                                                                }
-        else if(CycleTime==1||CycleTime==6){
-
-        //调用滑动验证函数
-        SwipeChoose(1,261,1097,932,1402,148,1488);
-                                                        }
 else{
 SwipeChoose(2,261,1097,932,1402,148,1488);
                                                 }
