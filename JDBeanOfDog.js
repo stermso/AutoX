@@ -1,8 +1,8 @@
 //设置屏幕尺寸，便于指定坐标时适配全分辨率操作
 setScreenMetrics(1080,2400);
 
-        //完成兑换前判断
-        EnterCww();
+//完成兑换前判断
+EnterCww();
 
 //结束程序
 EndApp();
