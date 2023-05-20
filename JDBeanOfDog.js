@@ -8,6 +8,7 @@ EnterCww();
 EndApp();
 engines.myEngine().forceStop();
 
+
 //结束应用的函数
 function EndApp(){
 home();
@@ -59,16 +60,6 @@ log('存在并可进行兑换');
 click(540,1620);
                         }
 
-//判断是否正常读取积分
-function ExistIntegral(){
-while(text('京东数码').findOne(15000)==null){
-id("fe").click();
-sleep(3000);
-ClickCww();
-                }
-log('存在并可正常读取积分');
-                                }
-
 //判断是否足够兑换500京豆
 function EnoughIntegral(){
 sleep(5000);
@@ -77,30 +68,40 @@ sleep(5000);
 // let IntegralReg=/^([8-9]\d{3,}|\d{5,})$/;
 //查找符合条件的text控件UiSelector.textMatches(reg)
 let integral=className("android.view.View").depth("16").drawingOrder("0").indexInParent("3").boundsInside(464,275,577,322).textMatches(/\d+/).findOne(10000);
+
+//积分充足的处理
 if(integral.text()>8000){
 log(`当前积分为${integral.text()},可兑换500京豆`);
                                 }
-else{
+
+//积分不足的处理
+else if(integral.text()>0&&integral.text()<8000){
 
 //结束程序
 EndApp();
 log(`当前积分为${integral.text()},不足以兑换500京豆,结束脚本`);
 engines.myEngine().forceStop();
                                 }
-                                        }
+
+//积分为0的处理
+else if(integral.text()==0){
+while(text('京东数码').findOne(15000)==null&&integral.text()==0){
+id("fe").click();
+sleep(3000);
+ClickCww();
+                }
+                        }
+                                }
 
 //立即兑换存在并点击
-//FIXME
 function ClickConvertible(){
 let n=0;
 sleep(5000);
-log(text('立即兑换').findOnce(1).depth());
-log(text('立即兑换').findOnce(1).drawingOrder());
-log(text('立即兑换').findOnce(1).indexInParent());
-while(text('立即兑换').findOnce(1)==null){
+text('即将开始').waitFor();
+while(text('即将开始').findOnce()){
 n++;
 log(n);
-}
+        }
 log(`等待${n/100}秒后找到控件`);
 text('立即兑换').findOnce(1).click();
 if(text('确定').findOne(10000)!=null){
@@ -113,7 +114,6 @@ log('已确定');
 log('已抢光/超时');
                         }
                                 }
-//FIXME
 
 //启动函数
 function EnterCww(){
@@ -121,7 +121,6 @@ launchApp('京东');
 ExistMine();
 ClickCww();
 ExistConvertible();
-ExistIntegral();
 EnoughIntegral();
 ClickConvertible();
                         }
