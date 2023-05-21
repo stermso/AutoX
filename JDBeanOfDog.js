@@ -9,6 +9,7 @@ EndApp();
 engines.myEngine().forceStop();
 
 
+
 //结束应用的函数
 function EndApp(){
 home();
@@ -32,6 +33,7 @@ desc('我的').click();
 log('存在我的并点击');
                         }
 
+//进入宠汪汪界面
 function ClickCww(){
 while(text('宠汪汪').findOne(15000)==null){
 EndApp();
@@ -64,8 +66,6 @@ click(540,1620);
 function EnoughIntegral(){
 sleep(5000);
 
-//匹配大于8000的值
-// let IntegralReg=/^([8-9]\d{3,}|\d{5,})$/;
 //查找符合条件的text控件UiSelector.textMatches(reg)
 let integral=className("android.view.View").depth("16").drawingOrder("0").indexInParent("3").boundsInside(464,275,577,322).textMatches(/\d+/).findOne(10000);
 
@@ -100,7 +100,6 @@ sleep(5000);
 text('即将开始').waitFor();
 while(text('即将开始').findOnce()){
 n++;
-log(n);
         }
 log(`等待${n/100}秒后找到控件`);
 text('立即兑换').findOnce(1).click();
