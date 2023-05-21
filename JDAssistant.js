@@ -94,16 +94,14 @@ log('结束脚本');
                                                         }
 
 //7个脚本任务
-//类型1
-// task1('金榜创造营','执行福利任务');(已失效)
-task1('东东农场','执行签到页任务');
-task1('健康社区','收取健康能量');
-task1('订单公益','每日签到');
-
-//类型2
-task2('种豆得豆','收取营养液');
-task2('领京豆','领取购物返豆');
-task2('宠汪汪','自动喂养');
+// task('金榜创造营','执行福利任务');(已失效)
+task('东东农场','执行签到页任务');
+task('健康社区','收取健康能量');
+task('订单公益','领取订单收益');
+task('养猪猪','自动投喂');
+task('种豆得豆','收取营养液');
+task('领京豆','领取购物返豆');
+task('宠汪汪','自动喂养');
 ExitApp();
 
 //判断结束脚本的条件
@@ -244,19 +242,7 @@ return Number(maxKey);
 
 
 //脚本任务函数
-
-//类型1
-function task1(name1,name2){
-let x=text(name1).findOne().bounds().centerX();
-let y=text(name1).findOne().bounds().centerY();
-click(x,y);
-text(name2).waitFor();
-taskconfirm();
-log(`${name1}完成`);
-                        }
-
-//类型2
-function task2(name1,name2){
+function task(name1,name2){
 
 //点击之前先判断是否可以点击
 text('启动脚本').waitFor();
