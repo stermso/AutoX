@@ -69,7 +69,7 @@ text('发送').findOne().click();
 sleep(5000);
 ExitApp();
 log('xf登录过期');
-exit();
+engines.myEngine().forceStop();
         }
                 }
 
@@ -78,9 +78,9 @@ for(let i=0;i<2;i++){
 more.findOne().click();
 log('点击更多');
 ClickFunc('工具盒');
-if(i==0){
-ClickFunc('清空收藏商品');
-ClickFunc('确认');
+if(i==1){
+// ClickFunc('清空收藏商品');(已失效)
+// ClickFunc('确认');
                                 }
 else{
 ClickFunc('清空店铺关注');
@@ -114,21 +114,12 @@ SwipeChoose(2,261,1097,932,1402,148,1488);
 //调用本次执行结束耗时及本次结束时间
 PerTimeEnd(CycleTime,PerTimeStart);
 
-//获取最终结束时间,并计算总耗时
-var endtime=new Date();
-log(`最终结束时间为：${endtime}`);
-var difftime=(endtime-starttime)/1000;//秒差
-var days=parseInt(difftime/86400);
-var hours=parseInt((difftime%86400)/3600);
-var minutes=parseInt((difftime%86400%3600)/60);
-var seconds=difftime%86400%3600%60;
-
-//一天执行7次,每天从1点开始,每次执行完过3小时20秒再执行下一次
-log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
+//获取最终结束时间,输出总耗时
+EndTime(starttime);
 
 //当天全部执行完毕后退出脚本
 //执行完毕后直接退出，避免执行后续的11000000s等待
-exit();
+engines.myEngine().forceStop();
         }
 else if(CycleTime==1||CycleTime==6){
 
@@ -150,6 +141,21 @@ sleep(11000000);
 
 
 //TAG需要调用的函数
+//总耗时
+function EndTime(starttime){
+let endtime=new Date();
+log(`最终结束时间为：${endtime}`);
+let difftime=(endtime-starttime)/1000;//秒差
+let days=parseInt(difftime/86400);
+let hours=parseInt((difftime%86400)/3600);
+let minutes=parseInt((difftime%86400%3600)/60);
+let seconds=difftime%86400%3600%60;
+
+//一天执行7次,每次执行完过3小时20秒再执行下一次
+log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
+}
+
+
 //每次结束时显示执行时长,执行次数及下次执行时间
 function PerTimeEnd(CycleTime,PerTimeStart){
 let NowTime=new Date();
@@ -166,7 +172,9 @@ log(`已执行完第${CycleTime}次,本次耗时：${DurationMinute}分${Duratio
 //判断时间是否适合继续执行
 if((new Date(NextTime).getHours()>=21&&new Date(NextTime).getMinutes()>=25)||(new Date(NextTime).getHours()<1&&new Date(NextTime).getMinutes()<=25)
 ||(NowTime.getHours()>=21&&NowTime.getMinutes()>=25)||(NowTime.getHours()<1&&NowTime.getMinutes()<25)){
-exit();
+log('下一次执行时间将超出可执行时间上限,终止程序');
+EndTime(starttime);
+engines.myEngine().forceStop();
         }
 }
 
