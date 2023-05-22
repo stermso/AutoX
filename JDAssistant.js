@@ -95,13 +95,13 @@ log('结束脚本');
 
 //7个脚本任务
 // task('金榜创造营','执行福利任务');(已失效)
-task('东东农场','执行签到页任务');
-task('健康社区','收取健康能量');
-task('订单公益','领取订单收益');
-task('养猪猪','自动投喂');
-task('种豆得豆','收取营养液');
-task('领京豆','领取购物返豆');
-task('宠汪汪','自动喂养');
+task('东东农场','执行签到页任务',1);
+task('健康社区','收取健康能量',10);
+task('订单公益','领取订单收益',8);
+task('养猪猪','自动投喂',9);
+task('种豆得豆','收取营养液',3);
+task('领京豆','领取购物返豆',7);
+task('宠汪汪','自动喂养',2);
 ExitApp();
 
 //判断结束脚本的条件
@@ -201,6 +201,7 @@ function taskconfirm(x){
 
 //判断启动
 text('启动脚本').waitFor();
+sleep(3000);
 let StartX=text('启动脚本').findOne().bounds().centerX();
 let StartY=text('启动脚本').findOne().bounds().centerY();
 click(StartX,StartY);
@@ -242,14 +243,24 @@ return Number(maxKey);
 
 
 //脚本任务函数
-function task(name1,name2){
+function task(name1,name2,z){
+// findOnce(1)//农场
+// findOnce(2)//宠汪汪
+// findOnce(3)//种豆得豆
+// findOnce(4)//惊喜开红包
+// findOnce(5)//汪汪乐园
+// findOnce(6)//汪汪赛跑
+// findOnce(7)//领京豆
+// findOnce(8)//订单公益
+// findOnce(9)//养猪猪
+// findOnce(10)//健康社区
 
 //点击之前先判断是否可以点击
 text('启动脚本').waitFor();
-sleep(2000);
 click(1030.5,467.5);
-let x=text(name1).depth(16).findOne().parent().bounds().centerX();
-let y=text(name1).depth(16).findOne().parent().bounds().centerY();
+sleep(3000);
+let x=className("android.widget.FrameLayout").depth("15").drawingOrder("1").indexInParent("0").findOnce(z).bounds().centerX()
+let y=className("android.widget.FrameLayout").depth("15").drawingOrder("1").indexInParent("0").findOnce(z).bounds().centerY()
 click(x,y);
 text(name2).waitFor();
 taskconfirm(name1);
