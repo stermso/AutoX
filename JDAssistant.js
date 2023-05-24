@@ -37,11 +37,6 @@ log('未进入界面');
 
 //重新启动应用
 launchApp('%assistant%');
-
-//判断退出循环执行条件为查找控件10秒，若满足条件则跳出否则继续循环
-if(more.findOne(10000)!=null){
-break;
-        }
                 }
 
 //登录校验及初始化
@@ -51,9 +46,8 @@ point++;
 log('未检测到账号登录');
 ExitApp();
 launchApp('%assistant%');
-if(text('%User%').findOne(10000)!=null){
-break;
-        }
+
+//重启10次终止，并发送提示消息
 if(point==10){
 ExitApp();
 launchApp('微信');
@@ -78,9 +72,9 @@ for(let i=0;i<2;i++){
 more.findOne().click();
 log('点击更多');
 ClickFunc('工具盒');
-if(i==1){
-// ClickFunc('清空收藏商品');(已失效)
-// ClickFunc('确认');
+if(i==0){
+ClickFunc('清空收藏商品');
+ClickFunc('确认');
                                 }
 else{
 ClickFunc('清空店铺关注');
@@ -596,7 +590,7 @@ swipe(e,f,e+1,f,500);
 //判断是否完成滑动
 //判断是否存在验证页
 sleep(3000);
-dogcheck=text('向右滑动完成拼图').findOne(15000);
+let dogcheck=text('向右滑动完成拼图').findOne(15000);
 if(dogcheck!=null){
 log('滑块未完成');
                         }
