@@ -1,6 +1,3 @@
-/*去除应用无障碍检测后可用android环境异常的套壳无法启动(例如一般的Android虚拟机)*/
-/*当前使用环境Android13*/
-
 //启动应用
 launchApp('BOSS直聘');
 
