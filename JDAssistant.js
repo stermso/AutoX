@@ -259,6 +259,12 @@ function task(name1,name2,z){
 
 //点击之前先判断是否可以点击
 text('启动脚本').waitFor();
+
+//判断新增控件
+if(text('立即领取').exists()){
+z+=1;
+        }
+
 //search-icons
 let x=className("android.widget.FrameLayout").depth("15").drawingOrder("2").indexInParent("1").findOnce(1).bounds().centerX();
 let y=className("android.widget.FrameLayout").depth("15").drawingOrder("2").indexInParent("1").findOnce(1).bounds().centerY();
