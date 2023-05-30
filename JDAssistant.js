@@ -259,11 +259,14 @@ function task(name1,name2,z){
 
 //点击之前先判断是否可以点击
 text('启动脚本').waitFor();
-click(1030.5,467.5);
-sleep(3000);
-let x=className("android.widget.FrameLayout").depth("15").drawingOrder("1").indexInParent("0").findOnce(z).bounds().centerX()
-let y=className("android.widget.FrameLayout").depth("15").drawingOrder("1").indexInParent("0").findOnce(z).bounds().centerY()
+//search-icons
+let x=className("android.widget.FrameLayout").depth("15").drawingOrder("2").indexInParent("1").findOnce(1).bounds().centerX();
+let y=className("android.widget.FrameLayout").depth("15").drawingOrder("2").indexInParent("1").findOnce(1).bounds().centerY();
 click(x,y);
+sleep(3000);
+let x1=className("android.widget.FrameLayout").depth("15").drawingOrder("1").indexInParent("0").findOnce(z).bounds().centerX();
+let y1=className("android.widget.FrameLayout").depth("15").drawingOrder("1").indexInParent("0").findOnce(z).bounds().centerY();
+click(x1,y1);
 text(name2).waitFor();
 taskconfirm(name1);
 log(`${name1}完成`);
