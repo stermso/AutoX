@@ -191,7 +191,7 @@ sleep(1000);
 home();
 sleep(1000);
 recents();
-sleep(1000);
+sleep(3000);
 Swipe(540,1660,540,150,1000);
 sleep(3000);
 home();
