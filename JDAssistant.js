@@ -1,3 +1,5 @@
+//FIX WAITING
+//TODO WILL UPDATE LOGIC OF FOODCHOOSE
 //初始启动时间
 var starttime=new Date();
 log(`启动时间 ${starttime}`);
