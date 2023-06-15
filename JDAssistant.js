@@ -1,60 +1,58 @@
-//FIX WAITING
-//TODO WILL UPDATE LOGIC OF FOODCHOOSE
-//初始启动时间
+        //初始启动时间
 var starttime=new Date();
 log(`启动时间 ${starttime}`);
 
-//变量声明
-var point=1;//判断重启应用次数
+        //变量声明
+//判断重启应用次数
+var point=0;
 
-//包名
+        //包名
 var xf='%assistant%';
 var wechat='com.tencent.mm';
 var jingdong='com.jingdong.app.mall';
 
-//右上角更多控件
+        //右上角更多控件
 var more=className('android.widget.FrameLayout').depth(15).drawingOrder(2).indexInParent(1);
 
-//设置屏幕尺寸，便于指定坐标时适配全分辨率操作
+        //设置屏幕尺寸，便于指定坐标时适配全分辨率操作
 setScreenMetrics(1080,2400);
 
-//请求截屏权限
-//截屏权限回收太麻烦了,可以在应用的初始示例中查看
-//懒得改了,一直开着截屏权限好了
+        //请求截屏权限
+        //截屏权限回收太麻烦了,可以在应用的初始示例中查看
+        //懒得改了,一直开着截屏权限好了
 requestScreenCapture();
 
-//设置每天执行次数
+        //设置每天执行次数
 for(var CycleTime=1;CycleTime<8;CycleTime++){
-
 //设置每次启动时间
 let PerTimeStart=new Date();
 log(`第${CycleTime}次启动时间为${PerTimeStart}`);
 
 //启动应用
-launchApp('%assistant%');
+launchApp('%AssistantName%');
 
 //判断是否进入应用界面
 while(more.findOne(10000)==null){
 log('未进入界面');
 
 //重新启动应用
-launchApp('%assistant%');
-                }
+launchApp('%AssistantName%');
+                        }
 
 //登录校验及初始化
 //进入界面但未检测到账号登录
-while(text('%User%').findOne(10000)==null){
+while(text('%WechatAccountName%').findOne(10000)==null){
 point++;
 log('未检测到账号登录');
 ExitApp();
-launchApp('%assistant%');
+launchApp('%AssistantName%');
 
-//重启10次终止，并发送提示消息
+//重启10次终止并发送提示消息
 if(point==10){
 ExitApp();
 launchApp('微信');
 ClickFunc('通讯录');
-ClickFunc('%wechatUser%');
+ClickFunc('%contact%');
 ClickFunc('发消息');
 id('kii').waitFor();
 setText("登录过期");
@@ -63,11 +61,15 @@ text('发送').findOne().click();
 
 //发送消息延迟
 sleep(5000);
+
+//退出应用
 ExitApp();
 log('xf登录过期');
+
+//结束脚本
 engines.myEngine().forceStop();
-        }
-                }
+                        }
+                        }
 
 //辅助工具初始化-清空收藏&&关注
 for(let i=0;i<2;i++){
@@ -77,20 +79,15 @@ ClickFunc('工具盒');
 if(i==0){
 ClickFunc('清空收藏商品');
 ClickFunc('确认');
-                                }
-else{
+                        }else{
 ClickFunc('清空店铺关注');
 ClickFunc('确认');
-                                }
-text('点击"结束脚本"按钮返回').waitFor();
-let EndX=text('结束脚本').findOne().bounds().centerX();
-let EndY=text('结束脚本').findOne().bounds().centerY();
-click(EndX,EndY);
+                        }
+EndScript();
 log('结束脚本');
-                                                        }
+                }
 
 //7个脚本任务
-// task('金榜创造营','执行福利任务');(已失效)
 task('东东农场','执行签到页任务',1);
 task('健康社区','收取健康能量',10);
 task('订单公益','领取订单收益',8);
@@ -98,47 +95,18 @@ task('养猪猪','自动投喂',9);
 task('种豆得豆','收取营养液',3);
 task('领京豆','领取购物返豆',7);
 task('宠汪汪','自动喂养',2);
-ExitApp();
 
-//判断结束脚本的条件
-//执行七次结束脚本
-if(CycleTime==7){
-
-//调用滑动验证函数
-SwipeChoose(2,261,1097,932,1402,148,1488);
-
-//调用本次执行结束耗时及本次结束时间
-PerTimeEnd(CycleTime,PerTimeStart);
-
-//获取最终结束时间,输出总耗时
-EndTime(starttime);
-
-//当天全部执行完毕后退出脚本
-//执行完毕后直接退出，避免执行后续的11000000s等待
-engines.myEngine().forceStop();
-        }
-else if(CycleTime==1||CycleTime==6){
-
-//调用滑动验证函数
-SwipeChoose(1,261,1097,932,1402,148,1488);
-                                                }
-else{
-SwipeChoose(2,261,1097,932,1402,148,1488);
-                                                }
-
-//每次执行完显示执行时长及下次执行时间
-if(CycleTime!=7){
-PerTimeEnd(CycleTime,PerTimeStart);
-                                        }
+//京东宠汪汪喂养
+foodChoise(PerTimeStart);
 
 //设置执行完毕后多久执行下一次
 sleep(11000000);
-                                                        }
+                }
 
 
-//TAG需要调用的函数
+        //TAG可调用的函数
 //总耗时
-function EndTime(starttime){
+function EndTime(){
 let endtime=new Date();
 log(`最终结束时间为：${endtime}`);
 let difftime=(endtime-starttime)/1000;//秒差
@@ -146,33 +114,48 @@ let days=parseInt(difftime/86400);
 let hours=parseInt((difftime%86400)/3600);
 let minutes=parseInt((difftime%86400%3600)/60);
 let seconds=difftime%86400%3600%60;
-
-//一天执行7次,每次执行完过3小时20秒再执行下一次
 log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
-}
+
+//结束脚本
+engines.myEngine().forceStop();
+                        }
 
 
 //每次结束时显示执行时长,执行次数及下次执行时间
-function PerTimeEnd(CycleTime,PerTimeStart){
+function PerTimeEnd(CurrentTimes,PerTimeStart,n){
 let NowTime=new Date();
 let NextTime=NowTime.getTime()+11000000;
 let Duration=(NowTime-PerTimeStart)/1000;
 let DurationMinute=parseInt(Duration/60);
 let DurationSecond=(Duration%60).toFixed(2);
-if(CycleTime=7){
-log(`已执行完第${CycleTime}次,本次耗时：${DurationMinute}分${DurationSecond}秒`);
-}else{
-log(`已执行完第${CycleTime}次,本次耗时：${DurationMinute}分${DurationSecond}秒,下一次执行时间为：${new Date(NextTime)}`);
-        }
+if(n==0){
+log('判断本次是否可执行');
+                        }else if(n==1){
+if(CurrentTimes==6){
+log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${DurationSecond}秒`);
+EndTime();
+                }else{
+log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${DurationSecond}秒,下一次执行时间为：${new Date(NextTime)}`);
+                        }
+                        }
 
 //判断时间是否适合继续执行
 if((new Date(NextTime).getHours()>=21&&new Date(NextTime).getMinutes()>=25)||(new Date(NextTime).getHours()<1&&new Date(NextTime).getMinutes()<=25)
 ||(NowTime.getHours()>=21&&NowTime.getMinutes()>=25)||(NowTime.getHours()<1&&NowTime.getMinutes()<25)){
 log('下一次执行时间将超出可执行时间上限,终止程序');
-EndTime(starttime);
-engines.myEngine().forceStop();
-        }
+EndTime();
+                }
+                        }
+
+
+//结束辅助内脚本的函数
+function EndScript(){
+text('点击"结束脚本"按钮返回').waitFor();
+let EndX=text('结束脚本').findOne().bounds().centerX();
+let EndY=text('结束脚本').findOne().bounds().centerY();
+click(EndX,EndY);
 }
+
 
 //封装的点击函数
 function ClickFunc(name){
@@ -202,7 +185,6 @@ home();
 
 //任务启停函数
 function taskconfirm(x){
-
 //判断启动
 text('启动脚本').waitFor();
 sleep(3000);
@@ -212,15 +194,13 @@ click(StartX,StartY);
 
 //判断结束
 if(x=='宠汪汪'){
-SwipeChoose(0,327,1150,838,1381,242,1466);
-                                                }
-else{
-text('点击"结束脚本"按钮返回').waitFor();
-let EndX=text('结束脚本').findOne().bounds().centerX();
-let EndY=text('结束脚本').findOne().bounds().centerY();
-click(EndX,EndY);
+VerifySwipe(327,1150,838,1381,242,1466);
+EndScript();
+ExitApp();
+                        }else{
+EndScript();
+                }
                         }
-                                }
 
 
 //找到数组中重复次数最多值的函数
@@ -229,8 +209,7 @@ let obj={};
 for (let i=0;i<arr.length;i++){
 if(obj[arr[i]]){
 obj[arr[i]]++;
-                }
-else{
+                }else{
 obj[arr[i]]=1;
                 }
                         }
@@ -248,17 +227,6 @@ return Number(maxKey);
 
 //脚本任务函数
 function task(name1,name2,z){
-// findOnce(1)//农场
-// findOnce(2)//宠汪汪
-// findOnce(3)//种豆得豆
-// findOnce(4)//惊喜开红包
-// findOnce(5)//汪汪乐园
-// findOnce(6)//汪汪赛跑
-// findOnce(7)//领京豆
-// findOnce(8)//订单公益
-// findOnce(9)//养猪猪
-// findOnce(10)//健康社区
-
 //点击之前先判断是否可以点击
 text('启动脚本').waitFor();
 
@@ -300,8 +268,7 @@ var lx=(sx-ex)/3;
 if(lx<0){lx=-lx};
 var x2=sx+lx/2+random(0,lx);
 var x3=sx+lx+lx/2+random(0,lx);
-                                }
-else{
+                        }else{
 var mx=(sx+ex)/2;
 var x2=mx+random(0,leaveHeightLength);
 var x3=mx-random(0,leaveHeightLength);
@@ -309,7 +276,7 @@ var ly=(sy-ey)/3;
 if(ly<0){ly=-ly};
 var y2=sy+ly/2+random(0,ly);
 var y3=sy+ly+ly/2+random(0,ly);
-                                }
+                        }
 
 //获取运行轨迹
 var time=[0,random(timeMin,timeMax)];
@@ -317,9 +284,8 @@ var track=bezierCreate(sx,sy,x2,y2,x3,y3,ex,ey);
 
 //滑动
 gestures(time.concat(track));
-                                }
+                        }
 function bezierCreate(x1,y1,x2,y2,x3,y3,x4,y4){
-
 //构建参数
 var h=100;
 var cp=[{x:x1,y:y1+h},{x:x2,y:y2+h},{x:x3,y:y3+h},{x:x4,y:y4+h}];
@@ -357,7 +323,7 @@ try{
 var j=(i<100)?i:(199-i);
 xx=parseInt(curve[j].x);
 yy=parseInt(Math.abs(100-curve[j].y));
-                                        }
+                        }
 catch(e){
 break;
         }
@@ -367,30 +333,9 @@ return array;
                 }
 
 
-//滑动选择函数
-function SwipeChoose(g,a,b,c,d,e,f){
-if(g==1){
-foodChoise(20);
-VerifySwipe(a,b,c,d,e,f);
-ExitApp();
-                                }
-else if(g==2){
-foodChoise(10);
-VerifySwipe(a,b,c,d,e,f);
-ExitApp();
-                                }
-else if(g==0){
-VerifySwipe(a,b,c,d,e,f);
-                                }
-                                        }
-
-
 //食物选择函数
-function foodChoise(x){
-log(`启动京东宠汪汪喂养${x}g食物`);
-var keshux,keshuy;
-keshux=(x==10)?420:841;
-keshuy=(x==10)?1169:1153;
+function foodChoise(PerTimeStart){
+log(`启动京东宠汪汪喂养食物`);
 
 //启动应用
 launchApp('京东');
@@ -418,26 +363,59 @@ className("android.widget.Image").depth("18").drawingOrder("0").indexInParent("0
 text('请选择狗粮克数').waitFor();
 sleep(1000);
 
+//判断当前喂养次数决定喂养克数
+let x=null;
+let CurrentTimes=Number(className('android.view.View').depth(17).drawingOrder(0).indexInParent(1).textMatches(/^今日已喂食\d次$/).findOne().text().match(/\d/)[0]);
+if(CurrentTimes==0||CurrentTimes==6){
+x=20;
+        }else{
+x=10;
+        }
+let keshux,keshuy;
+keshux=(x==10)?420:841;
+keshuy=(x==10)?1169:1153;
+
+//判断本次是否可执行
+PerTimeEnd(CurrentTimes,PerTimeStart,0);
+
 //点击狗粮克数
+log(`本次喂养${x}g食物`);
 click(keshux,keshuy);
 text('喂养').waitFor();
 sleep(1000);
 
 //点击喂养
 click(517,1710);
+
+//判断喂养次数决定是否执行
+if(CurrentTimes==7){
+ExitApp();
+EndTime();
+                }else{
+//调用滑动验证
+let jdc=VerifySwipe(261,1097,932,1402,148,1488);
+ExitApp();
+
+//判断是否成功喂食
+if(jdc==0){
+//0则喂食失败
+//喂食失败时，将喂食次数减1
+CurrentTimes-=1;
                 }
+
+//判断结束
+PerTimeEnd(CurrentTimes,PerTimeStart,1);
+                        }
+                        }
+
 
 //滑动验证函数
 function VerifySwipe(a,b,c,d,e,f){
-
-//滑块验证
 //判断是否存在验证页面，不存在则跳过函数，否则进行拼图验证
-if(text('向右滑动完成拼图').findOne(10000)){
-text('向右滑动完成拼图').waitFor();
+if(text('向右滑动完成拼图').findOne(20000)){
 
 //根据控件为true，判断验证页存在，进行while循环，直到验证结束
 while(text('向右滑动完成拼图').exists()){
-
 //延迟3秒截图，确保图片出现并正常截图
 sleep(3000);
 
@@ -481,9 +459,9 @@ var ss=color=="#ffc8c8c8"?1:0;
 s+=ss;
         }
 files.append(path,s+'\n');
-                                }
+                        }
 
-//目标滑块01代码匹配(%assistant%)
+//目标滑块01代码匹配(%AssistantName%)
 //滑块01代码:
 //1000000000000000000000000000000000000000000000000000000000000000001 TYPE1
 //100000000000000000000000000000000000000000000000000000000000000001  TYPE2
@@ -502,13 +480,11 @@ var ar = new Array();
 
 //遍历二值化图片
 for(let i=0;i<erzhi.length;i++){
-
 //定义TYPE1下标值
 var index=null;
 if(a==261){
 index=erzhi[i].indexOf('100000000000000000000000000000000000000000000000000000000000000000000000000000000000001');
-}
-else{
+}else{
 index=erzhi[i].indexOf('1000000000000000000000000000000000000000000000000000000000000000001');
 }
 
@@ -523,14 +499,12 @@ ar.push(index);
 var index2=null;
 if(a==261){
 index2=erzhi[i].indexOf('1000000000000000000000000000000000000000000000000000000000000000000000000000000000000001');
-}
-else{
+                        }else{
 index2=erzhi[i].indexOf('100000000000000000000000000000000000000000000000000000000000000001');
-}
+                        }
 
 //判断是否存在匹配TYPE2的值
 if(index2>-1){
-
 //将匹配值存入ar数组
 ar.push(index2);
                 }
@@ -547,16 +521,14 @@ log('目标横坐标'+leng);
 
 //滑动滑块
 if(leng>-1){
-
-//使用boundsInside设定控件在屏幕中的范围便于无法查找无法获取的控件(base64等)
-//滑块位置坐标范围设置为截图上下边坐标(1097,1402)，左右坐标为滑块左右坐标+-1
 let huakuai=null;
 if(a==261){
+//使用boundsInside设定控件在屏幕中的范围便于无法查找无法获取的控件(base64等)
+//滑块位置坐标范围设置为截图上下边坐标(1097,1402)，左右坐标为滑块左右坐标+-2
 huakuai=className("android.widget.Image").depth(19).drawingOrder(0).indexInParent(0).boundsInside(146, 1095, 263, 1404).findOne().bounds();
-}
-else{
+                        }else{
 huakuai=className("android.widget.Image").depth(21).drawingOrder(0).indexInParent(0).boundsInside(240, 1148, 329, 1383).findOne().bounds();
-}
+                        }
 log(huakuai);
 let top=huakuai.top;
 log("top:"+top);
@@ -586,11 +558,10 @@ log('hx:'+hx);
 let hy=random(b+2,d-2);
 log('hy:'+hy);
 
-//调用随机滑动函数仿真滑动，传入上诉随机值，并开始随机滑动
+//调用四阶贝斯曲线仿真滑动，传入上诉随机值，并开始随机滑动
 randomSwipe(gx,gy,hx,hy);
 log('开始随机滑动');
-                        }
-else{
+                        }else{
 log('Caculation Failed');
 
 //计算失败时，指定滑动并刷新图片，以便重复执行滑动直至验证成功
@@ -598,17 +569,20 @@ log('Caculation Failed');
 swipe(e,f,e+1,f,500);
                         }
 
-//判断是否完成滑动
-//判断是否存在验证页
 sleep(3000);
+
+//判断是否存在验证页
 let dogcheck=text('向右滑动完成拼图').findOne(15000);
+
+//判断是否完成滑动
 if(dogcheck!=null){
 log('滑块未完成');
-                        }
-else{
+                        }else{
 log('滑块完成');
+sleep(5000);
                 }
                         }
-sleep(5000);
+                        }else{
+return 0;
                 }
                         }
