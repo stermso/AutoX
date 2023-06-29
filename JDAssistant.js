@@ -378,14 +378,21 @@ keshuy=(x==10)?1169:1153;
 //判断本次是否可执行
 PerTimeEnd(CurrentTimes,PerTimeStart,0);
 
+//判断是否处于正在进食状态
+let feed=className('android.view.View').depth(16).drawingOrder(0).indexInParent(2).boundsInside(665,1010,1010,1090).findOne(3000);
+if(feed){
+log('汪汪进食中');
+CurrentTimes-=1;
+                }else{
 //点击狗粮克数
 log(`本次喂养${x}g食物`);
 click(keshux,keshuy);
 text('喂养').waitFor();
-sleep(1000);
+sleep(5000);
 
 //点击喂养
 click(517,1710);
+                }
 
 //判断喂养次数决定是否执行
 if(CurrentTimes==7){
