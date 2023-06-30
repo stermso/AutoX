@@ -105,6 +105,16 @@ sleep(11000000);
 
 
         //TAG可调用的函数
+//转换毫秒数
+function ChangeMilliSecond(text){
+let hours=Number(text.match(/\d小时/)[0].match(/\d/)[0]);
+let minutes=Number(text.match(/\d\d分/)[0].match(/\d\d/)[0]);
+let seconds=Number(text.match(/\d\d秒/)[0].match(/\d\d/)[0]);
+let millisecond=hours*60*60*1000+minutes*60*1000+seconds*1000;
+return millisecond;
+                        }
+
+
 //总耗时
 function EndTime(){
 let endtime=new Date();
