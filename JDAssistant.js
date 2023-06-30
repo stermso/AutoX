@@ -411,15 +411,8 @@ ExitApp();
 EndTime();
                 }else{
 //调用滑动验证
-let jdc=VerifySwipe(261,1097,932,1402,148,1488);
+VerifySwipe(261,1097,932,1402,148,1488);
 ExitApp();
-
-//判断是否成功喂食
-if(jdc==0&&feed==false){
-//0则喂食失败
-//喂食失败时，将喂食次数减1
-CurrentTimes-=1;
-                }
 
 //判断结束
 PerTimeEnd(CurrentTimes,PerTimeStart,1);
@@ -600,7 +593,5 @@ log('滑块完成');
 sleep(5000);
                 }
                         }
-                        }else{
-return 0;
-                }
+                        }
                         }
