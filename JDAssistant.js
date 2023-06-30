@@ -367,7 +367,9 @@ text('积分超值兑换').waitFor();
 sleep(1000);
 
 //点击喂养
+while(text('喂养').findOne(5000)==false){
 className("android.widget.Image").depth("18").drawingOrder("0").indexInParent("0").boundsInside(836,1229,1009,1402).findOne().click();
+}
 
 //选择克数
 text('请选择狗粮克数').waitFor();
@@ -397,12 +399,11 @@ CurrentTimes-=1;
 //点击狗粮克数
 log(`本次喂养${x}g食物`);
 click(keshux,keshuy);
-text('喂养').waitFor();
-sleep(5000);
-
+while(text('喂养').findOne(5000)){
 //点击喂养
 click(517,1710);
                 }
+                        }
 
 //判断喂养次数决定是否执行
 if(CurrentTimes==7){
