@@ -404,7 +404,7 @@ let jdc=VerifySwipe(261,1097,932,1402,148,1488);
 ExitApp();
 
 //判断是否成功喂食
-if(jdc==0){
+if(jdc==0&&feed==false){
 //0则喂食失败
 //喂食失败时，将喂食次数减1
 CurrentTimes-=1;
