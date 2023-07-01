@@ -418,6 +418,9 @@ let feed=className('android.view.View').depth(16).drawingOrder(0).indexInParent(
 if(feed){
 log('汪汪进食中');
 CurrentTimes-=1;
+
+//获取等待时长并转换成毫秒
+millisecond=ChangeMilliSecond(className('android.widget.TextView').boundsInside(742,1026,984,1070).textMatches(/^\d.{0,}秒$/).findOne().text());
                 }else{
 //点击狗粮克数
 log(`本次喂养${x}g食物`);
