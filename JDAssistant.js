@@ -148,13 +148,22 @@ engines.myEngine().forceStop();
 //每次结束时显示执行时长,执行次数及下次执行时间
 function PerTimeEnd(CurrentTimes,PerTimeStart,n){
 let NowTime=new Date();
-let NextTime=NowTime.getTime()+11000000;
+let TimeNum=null;
+if(millisecond){
+TimeNum=Number(millisecond)+60000;
+                        }else{
+TimeNum=11000000;
+                        }
+let NextTime=NowTime.getTime()+TimeNum;
 let Duration=(NowTime-PerTimeStart)/1000;
 let DurationMinute=parseInt(Duration/60);
 let DurationSecond=(Duration%60).toFixed(2);
+
+////预设情形，0为可执行判断，1为正常执行
 if(n==0){
 log('判断本次是否可执行');
                         }else if(n==1){
+//判断执行次数并输出对应内容
 if(CurrentTimes==6){
 log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${DurationSecond}秒`);
 EndTime();
