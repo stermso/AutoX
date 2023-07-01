@@ -105,6 +105,17 @@ sleep(11000000);
 
 
         //TAG可调用的函数
+//修改等待时长
+function timeWait(millisecond){
+if(millisecond){
+sleep(millisecond+60000);
+millisecond=null;
+        }else{
+sleep(11000000);
+                        }
+                        }
+
+
 //转换毫秒数
 function ChangeMilliSecond(text){
 let hours=Number(text.match(/\d小时/)[0].match(/\d/)[0]);
