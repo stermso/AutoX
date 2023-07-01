@@ -6,6 +6,9 @@ log(`启动时间 ${starttime}`);
 //判断重启应用次数
 var point=0;
 
+//获取等待毫秒
+var millisecond=null;
+
         //PackageName
 var xf='%assistant%';
 var wechat='%%';
