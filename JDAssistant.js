@@ -390,7 +390,7 @@ text('积分超值兑换').waitFor();
 sleep(1000);
 
 //点击喂养
-while(text('喂养').findOne(5000)==false){
+while(text('喂养').findOne(5000)==null){
 className("android.widget.Image").depth("18").drawingOrder("0").indexInParent("0").boundsInside(836,1229,1009,1402).findOne().click();
 }
 
@@ -425,7 +425,7 @@ millisecond=ChangeMilliSecond(className('android.widget.TextView').boundsInside(
 //点击狗粮克数
 log(`本次喂养${x}g食物`);
 click(keshux,keshuy);
-while(text('喂养').findOne(5000)){
+while(text('喂养').findOne(5000)!=null){
 //点击喂养
 click(517,1710);
                 }
