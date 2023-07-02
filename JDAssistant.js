@@ -173,8 +173,8 @@ log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${Du
                         }
 
 //判断时间是否适合继续执行
-if((new Date(NextTime).getHours()>=21&&new Date(NextTime).getMinutes()>=25)||(new Date(NextTime).getHours()<1&&new Date(NextTime).getMinutes()<=25)
-||(NowTime.getHours()>=21&&NowTime.getMinutes()>=25)||(NowTime.getHours()<1&&NowTime.getMinutes()<25)){
+if((new Date(NextTime).getHours()<1&&new Date(NextTime).getMinutes()>=10&&new Date(NextTime).getMinutes()<25)
+||(NowTime.getHours()>=21&&NowTime.getMinutes()>=20)||(NowTime.getHours()<1&&NowTime.getMinutes()<25)){
 log('下一次执行时间将超出可执行时间上限,终止程序');
 EndTime();
                 }
