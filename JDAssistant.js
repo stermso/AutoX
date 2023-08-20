@@ -173,12 +173,12 @@ log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${Du
                         }
 
 //判断时间是否适合继续执行
-if((new Date(NextTime).getHours()<1&&new Date(NextTime).getMinutes()>=10&&new Date(NextTime).getMinutes()<25)
-||(NowTime.getHours()>=21&&NowTime.getMinutes()>=20)||(NowTime.getHours()<1&&NowTime.getMinutes()<25)){
-log('下一次执行时间将超出可执行时间上限,终止程序');
+if((new Date(NextTime).getHours()>=21&&new Date(NextTime).getMinutes()>=25)
+||(NowTime.getHours()==0&&NowTime.getMinutes()<25)||(NowTime.getHours()>=21&&NowTime.getMinutes()<25)){
+log('下一次执行时间将超出可执行时间上限,或当前执行时间将影响下次正常执行，终止程序');
 EndTime();
-                }
-                        }
+        }
+        }
 
 
 //结束辅助内脚本的函数
@@ -389,10 +389,22 @@ sleep(1000);
 text('积分超值兑换').waitFor();
 sleep(1000);
 
+//判断是否处于正在进食状态
+let feed=className('android.view.View').depth(16).drawingOrder(0).indexInParent(2).boundsInside(665,1010,1010,1090).findOne(3000);
+
 //点击喂养
 while(text('喂养').findOne(5000)==null){
-className("android.widget.Image").depth("18").drawingOrder("0").indexInParent("0").boundsInside(836,1229,1009,1402).findOne().click();
-}
+id('fe').click();
+text('宠汪汪').waitFor();
+sleep(3000);
+click(cww.centerX(),cww.centerY());
+text('积分超值兑换').waitFor();
+sleep(3000);
+let wyx=textMatches(/^\d+g$/).boundsInside(800,1000,1080,1500).findOne().bounds().left;
+let wyy=textMatches(/^\d+g$/).boundsInside(800,1000,1080,1500).findOne().bounds().bottom;
+// log(wyx,wyy);
+click(wyx,wyy);
+        }
 
 //选择克数
 text('请选择狗粮克数').waitFor();
@@ -413,8 +425,6 @@ keshuy=(x==10)?1169:1153;
 //判断本次是否可执行
 PerTimeEnd(CurrentTimes,PerTimeStart,0);
 
-//判断是否处于正在进食状态
-let feed=className('android.view.View').depth(16).drawingOrder(0).indexInParent(2).boundsInside(665,1010,1010,1090).findOne(3000);
 if(feed){
 log('汪汪进食中');
 CurrentTimes-=1;
