@@ -2,12 +2,16 @@
 var starttime=new Date();
 log(`启动时间 ${starttime}`);
 
+
         //变量声明
 //判断重启应用次数
 var point=0;
 
 //获取等待毫秒
 var millisecond=null;
+
+//获取当前执行次数
+var CurrentTimes=null;
 
         //PackageName
 var xf='%assistant%';
@@ -103,7 +107,7 @@ task('宠汪汪','自动喂养',2);
 foodChoise(PerTimeStart);
 
 //设置执行完毕后多久执行下一次
-sleep(11000000);
+timeWait(millisecond);
                 }
 
 
@@ -113,7 +117,8 @@ function timeWait(millisecond){
 if(millisecond){
 sleep(millisecond+60000);
 millisecond=null;
-        }else{
+        }
+else{
 sleep(11000000);
                         }
                         }
@@ -140,6 +145,9 @@ let minutes=parseInt((difftime%86400%3600)/60);
 let seconds=difftime%86400%3600%60;
 log(`总共用时：${days}天${hours}小时${minutes}分钟${seconds}秒`);
 
+//结束应用程序
+ExitApp();
+
 //结束脚本
 engines.myEngine().forceStop();
                         }
@@ -150,8 +158,9 @@ function PerTimeEnd(CurrentTimes,PerTimeStart,n){
 let NowTime=new Date();
 let TimeNum=null;
 if(millisecond){
-TimeNum=Number(millisecond)+60000;
-                        }else{
+TimeNum=Number(millisecond)+5000;
+        }
+else{
 TimeNum=11000000;
                         }
 let NextTime=NowTime.getTime()+TimeNum;
@@ -162,19 +171,21 @@ let DurationSecond=(Duration%60).toFixed(2);
 ////预设情形，0为可执行判断，1为正常执行
 if(n==0){
 log('判断本次是否可执行');
-                        }else if(n==1){
+        }
+else if(n==1){
 //判断执行次数并输出对应内容
 if(CurrentTimes==6){
 log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${DurationSecond}秒`);
 EndTime();
-                }else{
+        }
+else{
 log(`已执行完第${CurrentTimes+1}次,本次耗时：${DurationMinute}分${DurationSecond}秒,下一次执行时间为：${new Date(NextTime)}`);
                         }
                         }
 
 //判断时间是否适合继续执行
-if((new Date(NextTime).getHours()>=21&&new Date(NextTime).getMinutes()>=25)
-||(NowTime.getHours()==0&&NowTime.getMinutes()<25)||(NowTime.getHours()>=21&&NowTime.getMinutes()<25)){
+if((new Date(NextTime).getHours()==0&&new Date(NextTime).getMinutes()<25)
+||(NowTime.getHours()==0&&NowTime.getMinutes()<25)||(NowTime.getHours()>=21&&NowTime.getMinutes()>=20)||new Date(NextTime).getHours()>=21&&new Date(NextTime).getMinutes()>=20){
 log('下一次执行时间将超出可执行时间上限,或当前执行时间将影响下次正常执行，终止程序');
 EndTime();
         }
@@ -210,7 +221,7 @@ home();
 sleep(1000);
 recents();
 sleep(3000);
-Swipe(540,1660,540,150,1000);
+swipe(540,1660,540,150,1000);
 sleep(3000);
 home();
         }
@@ -230,7 +241,8 @@ if(x=='宠汪汪'){
 VerifySwipe(327,1150,838,1381,242,1466);
 EndScript();
 ExitApp();
-                        }else{
+        }
+else{
 EndScript();
                 }
                         }
@@ -242,7 +254,8 @@ let obj={};
 for (let i=0;i<arr.length;i++){
 if(obj[arr[i]]){
 obj[arr[i]]++;
-                }else{
+        }
+else{
 obj[arr[i]]=1;
                 }
                         }
@@ -301,7 +314,8 @@ var lx=(sx-ex)/3;
 if(lx<0){lx=-lx};
 var x2=sx+lx/2+random(0,lx);
 var x3=sx+lx+lx/2+random(0,lx);
-                        }else{
+        }
+else{
 var mx=(sx+ex)/2;
 var x2=mx+random(0,leaveHeightLength);
 var x3=mx-random(0,leaveHeightLength);
@@ -382,29 +396,35 @@ log('点击我的');
 //点击宠汪汪
 text('宠汪汪').waitFor();
 sleep(1000);
-var cww=text('宠汪汪').findOne().parent().bounds();
+var cww=text('宠汪汪').findOne().bounds();
 click(cww.centerX(),cww.centerY());
 log('点击宠汪汪');
-sleep(1000);
-text('积分超值兑换').waitFor();
-sleep(1000);
-
-//判断是否处于正在进食状态
-let feed=className('android.view.View').depth(16).drawingOrder(0).indexInParent(2).boundsInside(665,1010,1010,1090).findOne(3000);
+sleep(3000);
 
 //点击喂养
-while(text('喂养').findOne(5000)==null){
+while(text('积分超值兑换').findOne(5000)==null){
 id('fe').click();
 text('宠汪汪').waitFor();
 sleep(3000);
 click(cww.centerX(),cww.centerY());
 text('积分超值兑换').waitFor();
 sleep(3000);
+}
+
+//获取等待时长并转换成毫秒
+if(textMatches(/.*小时.*/).findOne(10000)){
+millisecond=ChangeMilliSecond(textMatches(/.*小时.*/).findOne().text());
+log(`汪汪进食中,millisecond=${millisecond}`);
+}
+else{
+millisecond=null;
+while(text('请选择狗粮克数').findOne(5000)==null){
 let wyx=textMatches(/^\d+g$/).boundsInside(800,1000,1080,1500).findOne().bounds().left;
 let wyy=textMatches(/^\d+g$/).boundsInside(800,1000,1080,1500).findOne().bounds().bottom;
 // log(wyx,wyy);
 click(wyx,wyy);
         }
+log('已点击喂食按钮');
 
 //选择克数
 text('请选择狗粮克数').waitFor();
@@ -412,43 +432,41 @@ sleep(1000);
 
 //判断当前喂养次数决定喂养克数
 let x=null;
-let CurrentTimes=Number(className('android.view.View').depth(17).drawingOrder(0).indexInParent(1).textMatches(/^今日已喂食\d次$/).findOne().text().match(/\d/)[0]);
+CurrentTimes=Number(textMatches(/^今日已喂食\d次$/).findOne().text().match(/\d/)[0]);
+log(`今日已喂食<${CurrentTimes}>次`);
 if(CurrentTimes==0||CurrentTimes==6){
 x=20;
-        }else{
+        }
+else{
 x=10;
         }
 let keshux,keshuy;
 keshux=(x==10)?420:841;
 keshuy=(x==10)?1169:1153;
+log(`喂养克数:${x}`);
 
-//判断本次是否可执行
-PerTimeEnd(CurrentTimes,PerTimeStart,0);
-
-if(feed){
-log('汪汪进食中');
-CurrentTimes-=1;
-
-//获取等待时长并转换成毫秒
-millisecond=ChangeMilliSecond(className('android.widget.TextView').boundsInside(742,1026,984,1070).textMatches(/^\d.{0,}秒$/).findOne().text());
-                }else{
 //点击狗粮克数
 log(`本次喂养${x}g食物`);
 click(keshux,keshuy);
+sleep(5000);
 while(text('喂养').findOne(5000)!=null){
 //点击喂养
 click(517,1710);
                 }
+log('确认开始喂养')
                         }
 
 //判断喂养次数决定是否执行
 if(CurrentTimes==7){
 ExitApp();
 EndTime();
-                }else{
+        }
+else{
 //调用滑动验证
 VerifySwipe(261,1097,932,1402,148,1488);
 ExitApp();
+
+log('喂养完成');
 
 //判断结束
 PerTimeEnd(CurrentTimes,PerTimeStart,1);
@@ -546,7 +564,8 @@ ar.push(index);
 var index2=null;
 if(a==261){
 index2=erzhi[i].indexOf('1000000000000000000000000000000000000000000000000000000000000000000000000000000000000001');
-                        }else{
+        }
+else{
 index2=erzhi[i].indexOf('100000000000000000000000000000000000000000000000000000000000000001');
                         }
 
@@ -573,7 +592,8 @@ if(a==261){
 //使用boundsInside设定控件在屏幕中的范围便于无法查找无法获取的控件(base64等)
 //滑块位置坐标范围设置为截图上下边坐标(1097,1402)，左右坐标为滑块左右坐标+-2
 huakuai=className("android.widget.Image").depth(19).drawingOrder(0).indexInParent(0).boundsInside(146, 1095, 263, 1404).findOne().bounds();
-                        }else{
+        }
+else{
 huakuai=className("android.widget.Image").depth(21).drawingOrder(0).indexInParent(0).boundsInside(240, 1148, 329, 1383).findOne().bounds();
                         }
 log(huakuai);
